@@ -1,20 +1,8 @@
 <?php
 
-// TEMP debug: inspect what the serverless runtime passes for the request path.
-if (isset($_GET['__debug'])) {
-    header('Content-Type: application/json');
-    echo json_encode([
-        'REQUEST_URI' => $_SERVER['REQUEST_URI'] ?? null,
-        'PATH_INFO' => $_SERVER['PATH_INFO'] ?? null,
-        'SCRIPT_NAME' => $_SERVER['SCRIPT_NAME'] ?? null,
-        'PHP_SELF' => $_SERVER['PHP_SELF'] ?? null,
-        'X_ORIGINAL_URL' => $_SERVER['HTTP_X_ORIGINAL_URL'] ?? null,
-    ]);
-    exit;
-}
-
-// Vercel entry point (repo root, so the /api path segment is NOT stripped).
-// On Vercel the filesystem is read-only except /tmp.
+// Vercel serverless entry point. The vercel-php runtime preserves the original
+// request URI, so Laravel still sees the real path (the /api segment is NOT
+// leaked into the routes). On Vercel the filesystem is read-only except /tmp.
 if (getenv('VERCEL')) {
     // writable storage dirs
     foreach (['app/public', 'framework/cache/data', 'framework/sessions', 'framework/views', 'logs'] as $dir) {
@@ -35,4 +23,4 @@ if (getenv('VERCEL')) {
     }
 }
 
-require __DIR__ . '/public/index.php';
+require __DIR__ . '/../public/index.php';

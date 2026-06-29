@@ -4,10 +4,10 @@
   "buildCommand": "",
   "installCommand": "echo skip",
   "functions": {
-    "index.php": { "runtime": "vercel-php@0.9.0" }
+    "api/index.php": { "runtime": "vercel-php@0.9.0" }
   },
   "routes": [
     { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/index.php/$1" }
+    { "src": "/(.*)", "dest": "/api/index.php" }
   ]
 }
