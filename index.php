@@ -1,14 +1,13 @@
 <?php
 
-// Vercel entry point — route every request into Laravel's front controller.
+// Vercel entry point (repo root, so the /api path segment is NOT stripped).
 // On Vercel the filesystem is read-only except /tmp.
 if (getenv('VERCEL')) {
     // writable storage dirs
     foreach (['app/public', 'framework/cache/data', 'framework/sessions', 'framework/views', 'logs'] as $dir) {
         @mkdir("/tmp/storage/{$dir}", 0777, true);
     }
-    // Laravel writes its bootstrap caches (package/service manifests, etc.) on first boot —
-    // point them at /tmp since bootstrap/cache is read-only in the deployment.
+    // Laravel writes its bootstrap caches on first boot — point them at /tmp (bootstrap/cache is read-only).
     @mkdir('/tmp/bootstrap', 0777, true);
     foreach ([
         'APP_PACKAGES_CACHE' => '/tmp/bootstrap/packages.php',
@@ -23,4 +22,4 @@ if (getenv('VERCEL')) {
     }
 }
 
-require __DIR__ . '/../public/index.php';
+require __DIR__ . '/public/index.php';
