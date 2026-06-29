@@ -11,6 +11,19 @@ if (getenv('VERCEL')) {
     $_SERVER['SCRIPT_NAME'] = '/index.php';
     $_SERVER['PHP_SELF'] = '/index.php';
 
+    // Neon requires SNI to route to the right compute endpoint, but the
+    // serverless libpq build does not send it. Pass the endpoint id (the first
+    // label of the DB host) explicitly via PGOPTIONS, which libpq forwards as
+    // the connection "options" param — Neon's documented SNI workaround.
+    $dbUrl = getenv('DATABASE_URL') ?: getenv('DB_URL');
+    if ($dbUrl && ($dbHost = parse_url($dbUrl, PHP_URL_HOST))) {
+        $endpoint = str_replace('-pooler', '', explode('.', $dbHost)[0]);
+        if (str_starts_with($endpoint, 'ep-')) {
+            putenv("PGOPTIONS=endpoint={$endpoint}");
+            $_ENV['PGOPTIONS'] = $_SERVER['PGOPTIONS'] = "endpoint={$endpoint}";
+        }
+    }
+
     // writable storage dirs
     foreach (['app/public', 'framework/cache/data', 'framework/sessions', 'framework/views', 'logs'] as $dir) {
         @mkdir("/tmp/storage/{$dir}", 0777, true);
