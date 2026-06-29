@@ -4,6 +4,13 @@
 // request URI, so Laravel still sees the real path (the /api segment is NOT
 // leaked into the routes). On Vercel the filesystem is read-only except /tmp.
 if (getenv('VERCEL')) {
+    // The function lives at /api/index.php, so SCRIPT_NAME is "/api/index.php".
+    // Symfony/Laravel uses that to compute a base path and strips the leading
+    // "/api" from the request path — which makes every /api/* route 404.
+    // Pretend the script is at the web root so the full path reaches the router.
+    $_SERVER['SCRIPT_NAME'] = '/index.php';
+    $_SERVER['PHP_SELF'] = '/index.php';
+
     // writable storage dirs
     foreach (['app/public', 'framework/cache/data', 'framework/sessions', 'framework/views', 'logs'] as $dir) {
         @mkdir("/tmp/storage/{$dir}", 0777, true);
