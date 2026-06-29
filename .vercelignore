@@ -1,0 +1,5 @@
+/database/database.sqlite
+/storage/logs/*
+/node_modules
+/.env
+/tests
