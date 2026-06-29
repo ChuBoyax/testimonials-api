@@ -16,6 +16,10 @@ class TestimonialForm
                 TextInput::make('name')
                     ->required(),
                 TextInput::make('role'),
+                TextInput::make('social')
+                    ->label('Social profile (FB / IG / LinkedIn / TikTok)')
+                    ->helperText('Submitted by the visitor to prove they are a real person.')
+                    ->maxLength(255),
                 TextInput::make('rating')
                     ->required()
                     ->numeric()

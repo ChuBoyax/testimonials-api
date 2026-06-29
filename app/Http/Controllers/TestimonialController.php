@@ -27,6 +27,7 @@ class TestimonialController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:60'],
             'role' => ['nullable', 'string', 'max:80'],
+            'social' => ['nullable', 'string', 'max:255'],
             'rating' => ['required', 'integer', 'min:1', 'max:5'],
             'message' => ['required', 'string', 'max:500'],
         ]);

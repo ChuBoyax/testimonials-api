@@ -22,6 +22,15 @@ class TestimonialsTable
                 TextColumn::make('role')
                     ->searchable()
                     ->toggleable(),
+                TextColumn::make('social')
+                    ->label('Social')
+                    ->url(fn ($state) => $state && str_starts_with($state, 'http') ? $state : null)
+                    ->openUrlInNewTab()
+                    ->copyable()
+                    ->color('info')
+                    ->placeholder('—')
+                    ->searchable()
+                    ->toggleable(),
                 TextColumn::make('rating')
                     ->formatStateUsing(fn ($state) => str_repeat('★', (int) $state))
                     ->color('warning')
