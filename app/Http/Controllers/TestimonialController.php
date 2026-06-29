@@ -16,7 +16,7 @@ class TestimonialController extends Controller
             ->where('approved', true)
             ->latest()
             ->take(30)
-            ->get(['name', 'role', 'rating', 'message', 'created_at']);
+            ->get(['name', 'role', 'social', 'rating', 'message', 'created_at']);
     }
 
     /**
