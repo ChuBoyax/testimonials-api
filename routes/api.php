@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ResumeController;
 use App\Http\Controllers\TestimonialController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -26,3 +27,7 @@ Route::get('/diag', function () {
 
 Route::get('/testimonials', [TestimonialController::class, 'index']);
 Route::post('/testimonials', [TestimonialController::class, 'store']);
+
+// Résumé download gate — throttled to slow down password guessing.
+Route::post('/resume/verify', [ResumeController::class, 'verify'])
+    ->middleware('throttle:6,1');
